@@ -48,6 +48,24 @@ app.post('/todos', function (req, res) {
 	res.json(body);
 });
 
+// DELETE /todos/:id
+app.delete('/todos/:id', function (req, res) {
+	var todoId = parseInt(req.params.id, 10);	// gets the id parameter being passed in and saves it to a var after converting from string to int
+	var matchedTodo = _.findWhere(todos, {id: todoId});
+
+	if (matchedTodo) {
+		todos = _.without(todos, matchedTodo);
+		res.json(matchedTodo);
+	} else {
+		res.status(404).json({"error": "no todo found with id: " + todoId});
+	}
+});
+
+
+
+
+
+
 
 // SETUP EXPRESS SERVER. CONVENTION PLACES THIS AT BOTTOM OF FILE
 app.listen(PORT, function () {
