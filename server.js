@@ -1,5 +1,6 @@
 var express = require('express');
 var bodyParser = require('body-parser'); // need to first run $ npm install body-parser@1.13.3 --save (for post todos)
+var _ = require('underscore');
 
 var app = express();
 var PORT = process.env.PORT || 3000;
@@ -19,16 +20,10 @@ app.get('/todos', function (req, res) {
 	res.json(todos);				// Pass in todos array. Gets converted to json then sent to caller
 });
 
-// GET /todos/:id  (:id represents var that will be passed in)
+// GET /todos/:id  SHORTER/BETTER CODE USING UNDERSCORE (:id represents var that will be passed in)
 app.get('/todos/:id', function (req, res) {
 	var todoId = parseInt(req.params.id, 10);	// gets the id parameter being passed in and saves it to a var after converting from string to int
-	var matchedTodo;						
-
-	todos.forEach(function (todo) {
-		if (todoId === todo.id) {
-			matchedTodo = todo;
-		}
-	})
+	var matchedTodo = _.findWhere(todos, {id: todoId});
 
 	if (matchedTodo) {
 		res.json(matchedTodo);
@@ -38,14 +33,17 @@ app.get('/todos/:id', function (req, res) {
 
 });
 
-// POST /todos 
+// POST /todos ADDING VALIDATION & NOT ADDING OTHER FIELDS
 app.post('/todos', function (req, res) {
-	var body = req.body;
+	var body = _.pick(req.body, 'description', 'completed');			// only picks these fields, not others user might submit
+
+	if (!_.isBoolean(body.completed) || !_.isString(body.description) || body.description.trim().length === 0) {
+		return res.status(400).send();
+	}
 	
-	// add id field
+	body.description = body.description.trim();							// to get rid of unwanted spaces at beginning or end
 	body.id = todoNextId++;
 
-	// push body into array
 	todos.push(body);
 	res.json(body);
 });
