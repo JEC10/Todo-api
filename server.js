@@ -89,9 +89,6 @@ app.put('/todos/:id', function (req, res) {
 	res.json(matchedTodo);
 });
 
-
-
-
 // SETUP EXPRESS SERVER. CONVENTION PLACES THIS AT BOTTOM OF FILE
 app.listen(PORT, function () {
 	console.log('Express listening on port ' + PORT);
