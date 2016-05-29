@@ -88,6 +88,9 @@ app.delete('/todos/:id', function (req, res) {
 // PUT /todos/:id
 // Updates a todo
 // Shares code with GET /todos/:id and POST /todos (see notes re first 3 lines of code)
+// when update matchedTodo it updates it within the array it is in as well (see response below to my question)
+// "Objects in JavaScript are passed by reference. This means anytime we update matchedTodo, we are updating ..
+// .. the same thing that's stored in our array of todos.""
 
 app.put('/todos/:id', function (req, res) {
 	var todoId = parseInt(req.params.id, 10);
